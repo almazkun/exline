@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -83,6 +85,7 @@ DATABASES = {
     }
 }
 
+DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -155,7 +158,15 @@ LOGGING = {
     },
 }
 
-"""
-from exline.views import get_cities
-get_cities(country="KZ")
-"""
+# STATIC
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#static-root
+STATIC_ROOT = BASE_DIR / "staticfiles"
+# https://docs.djangoproject.com/en/dev/ref/settings/#static-url
+STATIC_URL = "/static/"
+# https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
+STATICFILES_DIRS = (
+    BASE_DIR / "static",
+)
+# http://whitenoise.evans.io/en/stable/django.html#add-compression-and-caching-support
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"

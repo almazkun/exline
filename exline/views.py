@@ -1,8 +1,6 @@
-from django.views import View
-from django.views.generic import ListView
 from django.http import JsonResponse
 
-from rest_framework import viewsets
+from rest_framework.views import APIView
 
 from exline.models import City
 from exline.api import ExlineApi
@@ -14,7 +12,7 @@ exline_server = "https://api.exline.systems/"
 origin_id = 4
 pricing_policy = "im_2021"
 # Create your views here.
-class CalculateView(View):
+class CalculateView(APIView):
     def get(self, *args, **kwargs):
         client = ExlineApi(
             exline_server=exline_server,
@@ -27,7 +25,7 @@ class CalculateView(View):
         return JsonResponse(r)
 
 
-class CitySearch(View):
+class CitySearch(APIView):
     def get(self, *args, **kwargs):
         search = self.request.GET.get("search")
         cities = City.objects.filter(title__icontains=search).order_by("city_id")[:10]
@@ -35,11 +33,14 @@ class CitySearch(View):
         return JsonResponse(serializer.data, safe=False)
 
 
-class CityListView(viewsets.ModelViewSet):
-    queryset = City.objects.all().order_by("city_id")
-    serializer_class = CitySerializer
+class CityListView(APIView):
+    def get(self, *args, **kwargs):
+        cities = City.objects.all().order_by("city_id")
+        serializer = CitySerializer(cities, many=True)
+        return JsonResponse(serializer.data, safe=False)
 
 
-class UpdateCityList(View):
+class UpdateCityList(APIView):
     def get(self, *args, **kwargs):
         get_cities(country="KZ")
+        return JsonResponse({"status":"ok"})
