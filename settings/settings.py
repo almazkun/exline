@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "exline",
     # 3rd party
     "rest_framework",
 ]
@@ -153,3 +154,8 @@ LOGGING = {
         "level": "DEBUG",
     },
 }
+
+"""
+from exline.views import get_cities
+get_cities(country="KZ")
+"""

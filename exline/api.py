@@ -57,3 +57,11 @@ class ExlineApi:
         )
 
         return self._make_call(endpoint=endpoint, params=params)
+
+    def destinations(self, country: str) -> dict:
+        endpoint = "public/v1/regions/destinations"
+        params = {
+            "country": country,
+        }
+
+        return self._make_call(endpoint=endpoint, params=params)
