@@ -37,3 +37,4 @@ echo "web: gunicorn settings.wsgi --log-file -" > Procfile
 # settings/settings.py
 DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 ```
+6. `heroku config:set DISABLE_COLLECTSTATIC=1 -a exline`
