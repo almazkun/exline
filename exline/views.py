@@ -1,5 +1,4 @@
-from django.http import JsonResponse
-
+from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from exline.models import City
@@ -22,7 +21,7 @@ class CalculateView(APIView):
         destination_id = self.request.GET.get("destination_id")
         weight = self.request.GET.get("weight")
         r = client.calculate(destination_id=destination_id, weight=weight)
-        return JsonResponse(r)
+        return Response(r)
 
 
 class CitySearch(APIView):
@@ -30,17 +29,17 @@ class CitySearch(APIView):
         search = self.request.GET.get("search")
         cities = City.objects.filter(title__icontains=search).order_by("city_id")[:10]
         serializer = CitySerializer(cities, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        return Response(serializer.data)
 
 
 class CityListView(APIView):
     def get(self, *args, **kwargs):
         cities = City.objects.all().order_by("city_id")
         serializer = CitySerializer(cities, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        return Response(serializer.data)
 
 
 class UpdateCityList(APIView):
     def get(self, *args, **kwargs):
         get_cities(country="KZ")
-        return JsonResponse({"status":"ok"})
+        return Response({"status":"ok"})
